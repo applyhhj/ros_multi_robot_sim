@@ -90,7 +90,7 @@ roslaunch agents_gazebo agents_gazebo.launch
 This will first launch the gazebo simulator with gui, then launch the rviz gui. Sometimes gazebo may die during launching, just run again<br />
 
 #How to control the robots
-The following command can be used to control robot0, you can change keyop0.launch to keyop1.launch to control robot1. It is not a good way, but it works well.<br />
+The following command can be used to control robot0, you can change keyop0.launch to keyop1.launch to control robot1. It is not a good way, but it works well. Remember to source the setup.bash file in the workspace<br />
 ```Bash
 roslaunch keyop keyop0.launch
 ```
