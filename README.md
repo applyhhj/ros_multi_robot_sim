@@ -1,2 +1,2 @@
 # ros_multi_robots
-hack ros hydro for multi robots simulation
+For multi robots simulation
