@@ -6,20 +6,21 @@ You can simply run patch.sh in patch directory to patch all files instead of doi
 # How to hack file
 To solve the namespace problem of odom and joint_states, we have to hack into gazebo_ros_kobuki.cpp file of  kobuki_gazebo_plugins and add node name prefix to these topics. The original libgazebo_ros_kobuki.so should be replaced.
 
-1. create workspace<br />
+Create workspace<br />
 http://wiki.ros.org/catkin/Tutorials/create_a_workspace
 
-2. clone source code to the src directory of this workspace
+Clone source code to the src directory of this workspace
 ```Bash
 $git clone https://github.com/yujinrobot/kobuki_desktop.git
 ```
-3. hack gazebo_ros_kobuki.cpp for topic name problems<br />
-Line 141   joint_state_pub_ = nh_.advertise<sensor_msgs::JointState>(node_name_ +"/joint_states", 1);<br />
-Line 198   odom_pub_ = nh_.advertise<nav_msgs::Odometry>(node_name_ +"/odom", 1);<br />
+Hack gazebo_ros_kobuki.cpp for topic name problems
+```cpp
+Line 141   joint_state_pub_ = nh_.advertise<sensor_msgs::JointState>(node_name_ +"/joint_states", 1);
+Line 198   odom_pub_ = nh_.advertise<nav_msgs::Odometry>(node_name_ +"/odom", 1);
 Line 386   joint_state_.header.frame_id = node_name_+"/base_link";<br />
 Line 397   odom_.header.frame_id = node_name_+"/odom";<br />
 Line 398   odom_.child_frame_id = node_name_+"/base_footprint";<br />
-
+```
 4. cd to the workspace root directory, compile<br />
 ps: when compile the code it may throw out errors like can not find test suit or some, So I just delete the qtestsuit directory<br />
 ```Bash
