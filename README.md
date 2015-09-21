@@ -74,7 +74,7 @@ Line 13  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find turtlebot
 ```
 
 #How to run
-First build the project in multi_robot_sim directory.<br />
+First build the project in workspace root directory.<br />
 ```Bash
 catkin_make
 ```
