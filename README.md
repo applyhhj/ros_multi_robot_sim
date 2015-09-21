@@ -10,11 +10,12 @@ To solve the namespace problem of odom and joint_states, we have to hack into ga
 http://wiki.ros.org/catkin/Tutorials/create_a_workspace
 
 2. clone source code to the src directory of this workspace
-$git clone https://github.com/yujinrobot/kobuki_desktop.git
+<br />$git clone https://github.com/yujinrobot/kobuki_desktop.git
 
 3. hack gazebo_ros_kobuki.cpp for topic name problems
 
 Line 141   joint_state_pub_ = nh_.advertise<sensor_msgs::JointState>(node_name_ +"/joint_states", 1);
+
 Line 198   odom_pub_ = nh_.advertise<nav_msgs::Odometry>(node_name_ +"/odom", 1);
 Line 386   joint_state_.header.frame_id = node_name_+"/base_link";
 Line 397   odom_.header.frame_id = node_name_+"/odom";
