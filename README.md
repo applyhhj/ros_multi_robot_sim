@@ -1,50 +1,48 @@
 # ros_multi_robots
 For multi robots simulation
 
-#You can simply run patch.sh in patch directory to patch all files instead of doing the following hack job, but ros should be in /opt/ros/hydro/ directory.
+You can simply run patch.sh in patch directory to patch all files instead of doing the following hack job, but ros should be in /opt/ros/hydro/ directory.
 
-#-------------------------------how to hack file----------------------------------------
+# How to hack file
+To solve the namespace problem of odom and joint_states, we have to hack into gazebo_ros_kobuki.cpp file of  kobuki_gazebo_plugins and add node name prefix to these topics. The original libgazebo_ros_kobuki.so should be replaced.
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>To solve the namespace problem of odom and joint_states, we have to hack into gazebo_ros_kobuki.cpp file of  kobuki_gazebo_plugins and add node name prefix to these topics. The original libgazebo_ros_kobuki.so is replaced.
-
-#create workspace
+1. create workspace
 http://wiki.ros.org/catkin/Tutorials/create_a_workspace
 
-#clone source code to the src directory of the workspace
-git clone https://github.com/yujinrobot/kobuki_desktop.git
+2. clone source code to the src directory of this workspace
+$git clone https://github.com/yujinrobot/kobuki_desktop.git
 
+3. hack gazebo_ros_kobuki.cpp for topic name problems
 
-#hack gazebo_ros_kobuki.cpp
-#for topic name problems
 Line 141   joint_state_pub_ = nh_.advertise<sensor_msgs::JointState>(node_name_ +"/joint_states", 1);
 Line 198   odom_pub_ = nh_.advertise<nav_msgs::Odometry>(node_name_ +"/odom", 1);
 Line 386   joint_state_.header.frame_id = node_name_+"/base_link";
 Line 397   odom_.header.frame_id = node_name_+"/odom";
 Line 398   odom_.child_frame_id = node_name_+"/base_footprint";
 
-#cd to the workspace root directory, compile
-#ps: when compile the code it may throw out errors like can not find test suit or some, So I just delete the qtestsuit directory
-catkin_make gazebo_ros_kobuki
+4. cd to the workspace root directory, compile
+ps: when compile the code it may throw out errors like can not find test suit or some, So I just delete the qtestsuit directory
 
-#back up original library
-sudo mv /opt/ros/hydro/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so.old
+$catkin_make gazebo_ros_kobuki
 
-#copy library
-sudo cp ./devel/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so
+5. back up original library
+$sudo mv /opt/ros/hydro/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so.old
 
+6. replace library
+$sudo cp ./devel/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>For sensor names, hack the xacro file
-#main file kobuki_hexagons_kinect.urdf.xacro
-sudo vim /opt/ros/hydro/share/turtlebot_description/robots/kobuki_hexagons_kinect.urdf.xacro
+7. For sensor names, hack xacro files
+(1)kobuki_hexagons_kinect.urdf.xacro
+$sudo vim /opt/ros/hydro/share/turtlebot_description/robots/kobuki_hexagons_kinect.urdf.xacro
 Line 11  <kobuki ns="$(arg prefix)"/>
 
-#kobuki.urdf.xacro
-sudo vim /opt/ros/hydro/share/kobuki_description/urdf/kobuki.urdf.xacro
+(2)kobuki.urdf.xacro
+$sudo vim /opt/ros/hydro/share/kobuki_description/urdf/kobuki.urdf.xacro
 Line 14  <xacro:macro name="kobuki" params="ns"> 
 Line 224     <kobuki_sim ns="${ns}"/>
 
-#kobuki_gazebo.urdf.xacro  
-sudo vim /opt/ros/hydro/share/kobuki_description/urdf/kobuki_gazebo.urdf.xacro
+(3)kobuki_gazebo.urdf.xacro 
+$sudo vim /opt/ros/hydro/share/kobuki_description/urdf/kobuki_gazebo.urdf.xacro
 Line 4  <xacro:macro name="kobuki_sim" params="ns">
 Line 44 	    <sensor type="contact" name="${ns}_bumpers">
 Line 55	    <sensor type="ray" name="${ns}_cliff_sensor_left">
@@ -58,27 +56,28 @@ Line 181-186	      <cliff_sensor_left_name>${ns}_cliff_sensor_left</cliff_sensor
 	      <bumper_name>${ns}_bumpers</bumper_name>
               <imu_name>${ns}_imu</imu_name>
 
-#single robot launch file(agent.launch.xml) need to pass the ns parameter
+(4)single robot launch file(agent.launch.xml in this workspace, and it may have already been done) need to pass the ns parameter
 Line 13  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find turtlebot_description)/robots/$(arg base)_$(arg stacks)_$(arg 3d_sensor).urdf.xacro' prefix:=$(arg robot_name)" />
 
-#-------------------------------how to hack file End----------------------------------------
 
-#++++++++++++++++++++++++++++++++++++++how to run++++++++++++++++++++++++++++++++++++++++++
-#First build the project in multi_robot_sim directory
+#How to run
+1. First build the project in multi_robot_sim directory
 catkin_make
-#Then source setup file
+
+2. Then source setup file
 source ./devel/setup.bash
-#Finally launch simulation
+
+3. Finally launch simulation
 roslaunch agents_gazebo agents_gazebo.launch
-#This will first launch the gazebo simulator with gui, then launch the rviz gui
-#++++++++++++++++++++++++++++++++++++++how to run End++++++++++++++++++++++++++++++++++++++++++
 
-#++++++++++++++++++++++++++++++++++++++how to control the robots++++++++++++++++++++++++++++++++++++++
-#The following command can be used to control robot0, you can change keyop0.launch to keyop1.launch to control robot1. It is not a good way, but it works well.
+This will first launch the gazebo simulator with gui, then launch the rviz gui.
+
+#How to control the robots
+The following command can be used to control robot0, you can change keyop0.launch to keyop1.launch to control robot1. It is not a good way, but it works well.
 roslaunch keyop keyop0.launch
-#Robots may drift in rviz and that is normal because localization if not 100% accurate.
-#++++++++++++++++++++++++++++++++++++++how to control the robots End++++++++++++++++++++++++++++++++++++++
 
-#ps++++++++++++++++++++++++++++++++++++++
-#set_param and hector_laserscan_to_pointcloud packages are used for my work, you do not need those package. And I am a freshman to ROS so there may still be some errors or mistakes, I will try my best to help you with this simulation. Hope this can help you!
+Robots may drift in rviz and that is normal because localization if not 100% accurate.
+
+#ps
+set_param and hector_laserscan_to_pointcloud packages are used for my work, you do not need those packages. And I am a freshman to ROS, so there may still be some errors or mistakes, I will try my best to help you with this simulation you can contact me by applyhhj@163.com. Hope this can help you!
 
