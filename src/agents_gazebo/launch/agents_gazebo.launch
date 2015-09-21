@@ -1,0 +1,23 @@
+<launch>
+
+  <!-- gazebo world start -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="world_name" value="$(find agents_gazebo)/worlds/empty.world"/>
+    <arg name="gui" value="true"/>
+  </include>
+
+  <!-- Map server -->
+  <arg name="map_file" default="$(find agents_gazebo)/maps/willow-2010-02-18-0.10.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" >
+       <param name="frame_id" value="/map"/>
+  </node>
+
+  <!-- include robots -->
+  <include file="$(find agents_gazebo)/launch/includes/agents.launch.xml"/>
+
+  <!-- include view -->
+  <include file="$(find view)/launch/view.launch"/>
+
+</launch>

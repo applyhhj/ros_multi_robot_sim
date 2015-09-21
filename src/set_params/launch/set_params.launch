@@ -1,0 +1,4 @@
+<launch>
+	<rosparam command="load" file="$(find set_params)/params/params_agent.yaml"/>
+	<rosparam command="load" file="$(find set_params)/params/params_localPlanner.yaml"/>
+</launch>
