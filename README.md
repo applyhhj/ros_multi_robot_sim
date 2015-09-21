@@ -94,7 +94,7 @@ The following command can be used to control robot0, you can change keyop0.launc
 ```Bash
 roslaunch keyop keyop0.launch
 ```
-Robots may drift in rviz and that is normal because localization if not 100% accurate.<br />
+Robots may drift in rviz and that is normal because localization is not 100% accurate.<br />
 
 #PS
 I am new to ROS, so there may still be some errors or mistakes, I will try my best to help you with this simulation, you can contact me by applyhhj@163.com. Hope this can help you!
