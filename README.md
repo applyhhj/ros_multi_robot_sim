@@ -22,15 +22,25 @@ Line 398   odom_.child_frame_id = node_name_+"/base_footprint";<br />
 
 4. cd to the workspace root directory, compile<br />
 ps: when compile the code it may throw out errors like can not find test suit or some, So I just delete the qtestsuit directory<br />
-$catkin_make gazebo_ros_kobuki<br />
+```Bash
+$catkin_make gazebo_ros_kobuki
+```
 5. back up original library<br />
-$sudo mv /opt/ros/hydro/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so.old<br />
+```Bash
+$sudo mv /opt/ros/hydro/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so.old
+```
 6. replace library<br />
-$sudo cp ./devel/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so<br />
+```Bash
+$sudo cp ./devel/lib/libgazebo_ros_kobuki.so /opt/ros/hydro/lib/libgazebo_ros_kobuki.so
+```
 7. For sensor names, hack xacro files<br />
 (1)kobuki_hexagons_kinect.urdf.xacro<br />
-$sudo vim /opt/ros/hydro/share/turtlebot_description/robots/kobuki_hexagons_kinect.urdf.xacro<br />
-Line 11  \<kobuki ns="$(arg prefix)"/\>\<br /\>
+```Bash
+$sudo vim /opt/ros/hydro/share/turtlebot_description/robots/kobuki_hexagons_kinect.urdf.xacro
+```
+```xml
+Line 11  <kobuki ns="$(arg prefix)"/>
+```
 (2)kobuki.urdf.xacro<br />
 $sudo vim /opt/ros/hydro/share/kobuki_description/urdf/kobuki.urdf.xacro<br />
 Line 14  <xacro:macro name="kobuki" params="ns"> <br />
