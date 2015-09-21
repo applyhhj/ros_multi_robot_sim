@@ -1,7 +1,0 @@
-  rot_stopped_velocity: 0.02
-  trans_stopped_velocity: 0.01
-
-  yaw_goal_tolerance: 0.10
-  xy_goal_tolerance: 0.10
-  latch_xy_goal_tolerance: true
-  ignore_goal_yaw: false

@@ -74,6 +74,7 @@ Line 13  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find turtlebot
 ```
 
 #How to run
+You can run the simple run.sh script to build and run the simulator or following the steps below.<br />
 First build the project in workspace root directory.<br />
 ```Bash
 catkin_make
@@ -86,7 +87,7 @@ Finally launch simulation.<br />
 ```Bash
 roslaunch agents_gazebo agents_gazebo.launch
 ```
-This will first launch the gazebo simulator with gui, then launch the rviz gui.<br />
+This will first launch the gazebo simulator with gui, then launch the rviz gui. Sometimes gazebo may die during launching, just run again<br />
 
 #How to control the robots
 The following command can be used to control robot0, you can change keyop0.launch to keyop1.launch to control robot1. It is not a good way, but it works well.<br />
@@ -96,5 +97,5 @@ roslaunch keyop keyop0.launch
 Robots may drift in rviz and that is normal because localization if not 100% accurate.<br />
 
 #PS
-set_param and hector_laserscan_to_pointcloud packages are used for my work, you do not need those packages. And I am a freshman to ROS, so there may still be some errors or mistakes, I will try my best to help you with this simulation you can contact me by applyhhj@163.com. Hope this can help you!
+I am new to ROS, so there may still be some errors or mistakes, I will try my best to help you with this simulation, you can contact me by applyhhj@163.com. Hope this can help you!
 
